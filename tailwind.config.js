@@ -1,8 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./*.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  content: [
+    "./static/**/*.html",
+    "./static/**/*.js",
+    // tambahkan path file lain yang menggunakan class Tailwind
+  ],
   theme: {
     extend: {},
   },
   plugins: [],
-}
+};

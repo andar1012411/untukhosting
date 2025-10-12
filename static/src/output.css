@@ -1,1 +1,4 @@
 /*! tailwindcss v4.1.14 | MIT License | https://tailwindcss.com */
+.static {
+  position: static;
+}
