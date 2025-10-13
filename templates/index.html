@@ -1,16 +1,140 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="static/image/google.png" type="image/x-icon">
-    <title>Beranda</title>
-    <link rel="stylesheet" href="static/src/output.css">
-</head>
-<body>
-    <div class="bg-blue-500 text-red p-4 underline ">Test Tailwind</div>
-    <h1>Selamat Datang di Beranda</h1>
-    <p>Ini adalah contoh konten.</p>
-    
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Beranda{% endblock %}
+
+{% block content %}
+  <!-- Hero Section dengan Slider -->
+  <section class="relative w-full h-screen overflow-hidden">
+    <div class="slider">
+      <div class="slide active hero-bg" style="background-image: url('{{ url_for('static', filename='image/mug.png') }}');"></div>
+      <div class="slide hero-bg" style="background-image: url('{{ url_for('static', filename='image/keychain.png') }}');"></div>
+      <div class="slide hero-bg" style="background-image: url('{{ url_for('static', filename='image/sablon.png') }}');"></div>
+      <div class="absolute inset-0 bg-black/30"></div>
+    </div>
+    <div class="relative z-20 flex items-center justify-center h-full px-6">
+      <div class="text-center text-white space-y-6 max-w-4xl">
+        <h1 class="text-5xl md:text-6xl font-bold">Vita Leather</h1>
+        <p class="text-xl md:text-2xl">Hidupkan Gaya dengan Kulit Asli</p>
+        <a href="#shop" class="bg-amber-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-amber-700 transition mt-6 inline-block">Jelajahi Sekarang</a>
+      </div>
+    </div>
+    <div class="dots">
+      <span class="dot active"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+      <p class="text-white text-sm font-medium mb-2">Gulir</p>
+      <div class="w-6 h-10 border-2 border-white rounded-full flex justify-center">
+        <div class="w-1 h-3 bg-white rounded-full animate-bounce mt-2"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Koleksi Unggulan (Slider) -->
+  <section id="shop" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center mb-12">Koleksi Unggulan</h2>
+      <div class="product-slider overflow-hidden">
+        <div class="product-slide flex animate-slide" id="productSlider">
+          <div class="bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2">
+            <img src="{{ url_for('static', filename='image/product1.jpg') }}" alt="Tas Kulit" class="w-full h-48 object-cover">
+            <div class="p-4">
+              <h3 class="text-lg font-semibold">Tas Kulit Elegan</h3>
+              <p class="text-gray-600 text-sm mt-1">Rp 1.200.000</p>
+              <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
+            </div>
+          </div>
+          <div class="bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2">
+            <img src="{{ url_for('static', filename='image/product2.jpg') }}" alt="Sepatu Leather" class="w-full h-48 object-cover">
+            <div class="p-4">
+              <h3 class="text-lg font-semibold">Sepatu Leather</h3>
+              <p class="text-gray-600 text-sm mt-1">Rp 950.000</p>
+              <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
+            </div>
+          </div>
+          <div class="bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2">
+            <img src="{{ url_for('static', filename='image/product3.jpg') }}" alt="Dompet Custom" class="w-full h-48 object-cover">
+            <div class="p-4">
+              <h3 class="text-lg font-semibold">Dompet Custom</h3>
+              <p class="text-gray-600 text-sm mt-1">Rp 450.000</p>
+              <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
+            </div>
+          </div>
+          <div class="bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2">
+            <img src="{{ url_for('static', filename='image/product4.jpg') }}" alt="Ikat Pinggang" class="w-full h-48 object-cover">
+            <div class="p-4">
+              <h3 class="text-lg font-semibold">Ikat Pinggang Kulit</h3>
+              <p class="text-gray-600 text-sm mt-1">Rp 350.000</p>
+              <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
+            </div>
+          </div>
+          <!-- Duplicates for looping -->
+          <div class="bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2">
+            <img src="{{ url_for('static', filename='image/product1.jpg') }}" alt="Tas Kulit" class="w-full h-48 object-cover">
+            <div class="p-4">
+              <h3 class="text-lg font-semibold">Tas Kulit Elegan</h3>
+              <p class="text-gray-600 text-sm mt-1">Rp 1.200.000</p>
+              <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
+            </div>
+          </div>
+          <div class="bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2">
+            <img src="{{ url_for('static', filename='image/product2.jpg') }}" alt="Sepatu Leather" class="w-full h-48 object-cover">
+            <div class="p-4">
+              <h3 class="text-lg font-semibold">Sepatu Leather</h3>
+              <p class="text-gray-600 text-sm mt-1">Rp 950.000</p>
+              <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
+            </div>
+          </div>
+          <div class="bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2">
+            <img src="{{ url_for('static', filename='image/product3.jpg') }}" alt="Dompet Custom" class="w-full h-48 object-cover">
+            <div class="p-4">
+              <h3 class="text-lg font-semibold">Dompet Custom</h3>
+              <p class="text-gray-600 text-sm mt-1">Rp 450.000</p>
+              <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
+            </div>
+          </div>
+          <div class="bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2">
+            <img src="{{ url_for('static', filename='image/product4.jpg') }}" alt="Ikat Pinggang" class="w-full h-48 object-cover">
+            <div class="p-4">
+              <h3 class="text-lg font-semibold">Ikat Pinggang Kulit</h3>
+              <p class="text-gray-600 text-sm mt-1">Rp 350.000</p>
+              <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Event Terbaru (Statis) -->
+  <section id="events" class="py-20 bg-amber-100">
+    <div class="max-w-7xl mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center mb-12">Event Terbaru</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl p-4 shadow-md">
+          <img src="{{ url_for('static', filename='image/event1.jpg') }}" alt="Event 1" class="w-full h-40 object-cover rounded-lg">
+          <h3 class="text-lg font-semibold mt-2">Pameran Kulit 2025</h3>
+          <p class="text-gray-600 text-sm">13-15 Okt, Jakarta</p>
+        </div>
+        <div class="bg-white rounded-xl p-4 shadow-md">
+          <img src="{{ url_for('static', filename='image/event2.jpg') }}" alt="Event 2" class="w-full h-40 object-cover rounded-lg">
+          <h3 class="text-lg font-semibold mt-2">Workshop Leather</h3>
+          <p class="text-gray-600 text-sm">20 Okt, Online</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="py-16 bg-white">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Berlangganan</h2>
+      <p class="text-gray-600 mb-6">Dapatkan update koleksi terbaru, promo, dan event spesial!</p>
+      <form class="max-w-lg mx-auto flex flex-col sm:flex-row gap-4">
+        <input type="email" placeholder="Email Anda" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500">
+        <button type="submit" class="bg-amber-600 text-white px-6 py-2 rounded-lg hover:bg-amber-700 transition">Daftar</button>
+      </form>
+    </div>
+  </section>
+{% endblock %}
