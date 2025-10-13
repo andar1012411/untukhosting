@@ -49,6 +49,7 @@
       display: flex;
       overflow: hidden;
       width: 100%;
+      min-height: 48rem; /* Ensure visible height */
     }
     .product-slide {
       min-width: 25%; /* Default: 4 items on desktop */
@@ -56,10 +57,10 @@
     }
     @keyframes slide {
       0% { transform: translateX(0); }
-      100% { transform: translateX(-75%); } /* 3 slides x 25% */
+      100% { transform: translateX(-100%); } /* Adjusted for 4 items + 4 duplicates = 200% total width */
     }
     .animate-slide {
-      animation: slide 12s infinite linear;
+      animation: slide 16s infinite linear;
     }
     .navbar {
       transition: all 0.3s ease-in-out;
@@ -87,18 +88,40 @@
         opacity: 1;
       }
     }
-    @media (max-width: 640px) { /* sm breakpoint */
+    @media (max-width: 640px) { /* sm breakpoint (mobile) */
       .product-slide {
         min-width: 100%; /* 1 item on mobile */
       }
+      @keyframes slide {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-300%); } /* 3 duplicates x 100% */
+      }
+      .animate-slide {
+        animation: slide 12s infinite linear;
+      }
     }
-    @media (min-width: 641px) and (max-width: 1024px) { /* md to lg breakpoint */
+    @media (min-width: 641px) and (max-width: 1024px) { /* md to lg breakpoint (tablet) */
       .product-slide {
         min-width: 50%; /* 2 items on tablet */
       }
       @keyframes slide {
         0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); } /* 2 slides x 50% */
+        100% { transform: translateX(-200%); } /* 4 duplicates x 50% */
+      }
+      .animate-slide {
+        animation: slide 12s infinite linear;
+      }
+    }
+    @media (min-width: 1025px) { /* lg and above (desktop) */
+      .product-slide {
+        min-width: 25%; /* 4 items on desktop */
+      }
+      @keyframes slide {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-100%); } /* 4 duplicates x 25% */
+      }
+      .animate-slide {
+        animation: slide 16s infinite linear;
       }
     }
   </style>
@@ -111,12 +134,14 @@
       <h1 class="text-2xl font-bold text-white">Vita Leather</h1>
       <ul class="hidden md:flex space-x-8 font-medium">
         <li><a href="#shop" class="hover:text-amber-200">Koleksi</a></li>
+        <li><a href="#katalog" class="hover:text-amber-200">Katalog</a></li>
         <li><a href="#events" class="hover:text-amber-200">Event</a></li>
         <li><a href="#about" class="hover:text-amber-200">Tentang</a></li>
         <li><a href="#contact" class="hover:text-amber-200">Kontak</a></li>
+        <li><a href="{{ url_for('admin_login') }}" class="hover:text-amber-200">Admin</a></li>
       </ul>
       <div class="flex space-x-4">
-        <button class="text-white hover:text-amber-200">serach</button>
+        <button class="text-white hover:text-amber-200">search</button>
         <button class="text-white hover:text-amber-200">contact</button>
         <button class="text-white hover:text-amber-200">shop</button>
       </div>

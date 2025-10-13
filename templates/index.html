@@ -6,22 +6,23 @@
   <!-- Hero Section dengan Slider -->
   <section class="relative w-full h-screen overflow-hidden">
     <div class="slider">
-      <div class="slide active hero-bg" style="background-image: url('{{ url_for('static', filename='image/mug.png') }}');"></div>
-      <div class="slide hero-bg" style="background-image: url('{{ url_for('static', filename='image/keychain.png') }}');"></div>
-      <div class="slide hero-bg" style="background-image: url('{{ url_for('static', filename='image/sablon.png') }}');"></div>
+      {% for slide in sliders %}
+      <div class="slide {% if loop.first %}active{% endif %} hero-bg" 
+           style="background-image: url('{{ url_for('static', filename=slide.image_url) }}');"></div>
+      {% endfor %}
       <div class="absolute inset-0 bg-black/30"></div>
     </div>
     <div class="relative z-20 flex items-center justify-center h-full px-6">
       <div class="text-center text-white space-y-6 max-w-4xl">
-        <h1 class="text-5xl md:text-6xl font-bold">Vita Leather</h1>
-        <p class="text-xl md:text-2xl">Hidupkan Gaya dengan Kulit Asli</p>
+        <h1 class="text-5xl md:text-6xl font-bold">{{ sliders[0].title }}</h1>
+        <p class="text-xl md:text-2xl">{{ sliders[0].subtitle }}</p>
         <a href="#shop" class="bg-amber-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-amber-700 transition mt-6 inline-block">Jelajahi Sekarang</a>
       </div>
     </div>
     <div class="dots">
-      <span class="dot active"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
+      {% for slide in sliders %}
+        <span class="dot {% if loop.first %}active{% endif %}"></span>
+      {% endfor %}
     </div>
     <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
       <p class="text-white text-sm font-medium mb-2">Gulir</p>
@@ -36,92 +37,65 @@
     <div class="max-w-7xl mx-auto px-6">
       <h2 class="text-3xl font-bold text-center mb-12">Koleksi Unggulan</h2>
       <div class="product-slider overflow-hidden">
-        <div class="product-slide flex animate-slide" id="productSlider">
-          <div class="bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2">
-            <img src="{{ url_for('static', filename='image/product1.jpg') }}" alt="Tas Kulit" class="w-full h-48 object-cover">
+        <div class="flex animate-slide" id="productSlider">
+          {% for p in products %}
+          <div class="product-slide bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2 flex-shrink-0">
+            <img src="{{ url_for('static', filename=p.image_url) }}" alt="{{ p.name }}" class="w-full h-48 object-cover">
             <div class="p-4">
-              <h3 class="text-lg font-semibold">Tas Kulit Elegan</h3>
-              <p class="text-gray-600 text-sm mt-1">Rp 1.200.000</p>
+              <h3 class="text-lg font-semibold">{{ p.name }}</h3>
+              <p class="text-gray-600 text-sm mt-1">Rp {{ "{:,.0f}".format(p.price) }}</p>
               <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
             </div>
           </div>
-          <div class="bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2">
-            <img src="{{ url_for('static', filename='image/product2.jpg') }}" alt="Sepatu Leather" class="w-full h-48 object-cover">
-            <div class="p-4">
-              <h3 class="text-lg font-semibold">Sepatu Leather</h3>
-              <p class="text-gray-600 text-sm mt-1">Rp 950.000</p>
-              <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
-            </div>
-          </div>
-          <div class="bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2">
-            <img src="{{ url_for('static', filename='image/product3.jpg') }}" alt="Dompet Custom" class="w-full h-48 object-cover">
-            <div class="p-4">
-              <h3 class="text-lg font-semibold">Dompet Custom</h3>
-              <p class="text-gray-600 text-sm mt-1">Rp 450.000</p>
-              <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
-            </div>
-          </div>
-          <div class="bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2">
-            <img src="{{ url_for('static', filename='image/product4.jpg') }}" alt="Ikat Pinggang" class="w-full h-48 object-cover">
-            <div class="p-4">
-              <h3 class="text-lg font-semibold">Ikat Pinggang Kulit</h3>
-              <p class="text-gray-600 text-sm mt-1">Rp 350.000</p>
-              <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
-            </div>
-          </div>
+          {% endfor %}
           <!-- Duplicates for looping -->
-          <div class="bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2">
-            <img src="{{ url_for('static', filename='image/product1.jpg') }}" alt="Tas Kulit" class="w-full h-48 object-cover">
+          {% for p in products %}
+          <div class="product-slide bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2 flex-shrink-0">
+            <img src="{{ url_for('static', filename=p.image_url) }}" alt="{{ p.name }}" class="w-full h-48 object-cover">
             <div class="p-4">
-              <h3 class="text-lg font-semibold">Tas Kulit Elegan</h3>
-              <p class="text-gray-600 text-sm mt-1">Rp 1.200.000</p>
+              <h3 class="text-lg font-semibold">{{ p.name }}</h3>
+              <p class="text-gray-600 text-sm mt-1">Rp {{ "{:,.0f}".format(p.price) }}</p>
               <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
             </div>
           </div>
-          <div class="bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2">
-            <img src="{{ url_for('static', filename='image/product2.jpg') }}" alt="Sepatu Leather" class="w-full h-48 object-cover">
-            <div class="p-4">
-              <h3 class="text-lg font-semibold">Sepatu Leather</h3>
-              <p class="text-gray-600 text-sm mt-1">Rp 950.000</p>
-              <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
-            </div>
-          </div>
-          <div class="bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2">
-            <img src="{{ url_for('static', filename='image/product3.jpg') }}" alt="Dompet Custom" class="w-full h-48 object-cover">
-            <div class="p-4">
-              <h3 class="text-lg font-semibold">Dompet Custom</h3>
-              <p class="text-gray-600 text-sm mt-1">Rp 450.000</p>
-              <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
-            </div>
-          </div>
-          <div class="bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2">
-            <img src="{{ url_for('static', filename='image/product4.jpg') }}" alt="Ikat Pinggang" class="w-full h-48 object-cover">
-            <div class="p-4">
-              <h3 class="text-lg font-semibold">Ikat Pinggang Kulit</h3>
-              <p class="text-gray-600 text-sm mt-1">Rp 350.000</p>
-              <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
-            </div>
-          </div>
+          {% endfor %}
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Event Terbaru (Statis) -->
+  <!-- Katalog -->
+  <section id="katalog" class="py-20 bg-amber-50">
+    <div class="max-w-7xl mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center mb-12">Katalog Produk</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for item in catalog_items %}
+        <div class="bg-white rounded-xl overflow-hidden shadow-md">
+          <img src="{{ url_for('static', filename=item.image_url) }}" alt="{{ item.name }}" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h3 class="text-lg font-semibold">{{ item.name }}</h3>
+            <p class="text-gray-600 text-sm mt-1">Rp {{ "{:,.0f}".format(item.price) }}</p>
+            <p class="text-gray-600 text-sm mt-1">{{ item.description }}</p>
+            <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Event Terbaru -->
   <section id="events" class="py-20 bg-amber-100">
     <div class="max-w-7xl mx-auto px-6">
       <h2 class="text-3xl font-bold text-center mb-12">Event Terbaru</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% for e in events %}
         <div class="bg-white rounded-xl p-4 shadow-md">
-          <img src="{{ url_for('static', filename='image/event1.jpg') }}" alt="Event 1" class="w-full h-40 object-cover rounded-lg">
-          <h3 class="text-lg font-semibold mt-2">Pameran Kulit 2025</h3>
-          <p class="text-gray-600 text-sm">13-15 Okt, Jakarta</p>
+          <img src="{{ url_for('static', filename=e.image_url) }}" alt="{{ e.name }}" class="w-full h-40 object-cover rounded-lg">
+          <h3 class="text-lg font-semibold mt-2">{{ e.name }}</h3>
+          <p class="text-gray-600 text-sm">{{ e.date }}</p>
         </div>
-        <div class="bg-white rounded-xl p-4 shadow-md">
-          <img src="{{ url_for('static', filename='image/event2.jpg') }}" alt="Event 2" class="w-full h-40 object-cover rounded-lg">
-          <h3 class="text-lg font-semibold mt-2">Workshop Leather</h3>
-          <p class="text-gray-600 text-sm">20 Okt, Online</p>
-        </div>
+        {% endfor %}
       </div>
     </div>
   </section>
