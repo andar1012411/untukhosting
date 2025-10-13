@@ -32,37 +32,37 @@
     </div>
   </section>
 
-  <!-- Koleksi Unggulan (Slider) -->
-  <section id="shop" class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-6">
-      <h2 class="text-3xl font-bold text-center mb-12">Koleksi Unggulan</h2>
-      <div class="product-slider overflow-hidden">
-        <div class="flex animate-slide" id="productSlider">
-          {% for p in products %}
-          <div class="product-slide bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2 flex-shrink-0">
-            <img src="{{ url_for('static', filename=p.image_url) }}" alt="{{ p.name }}" class="w-full h-48 object-cover">
-            <div class="p-4">
-              <h3 class="text-lg font-semibold">{{ p.name }}</h3>
-              <p class="text-gray-600 text-sm mt-1">Rp {{ "{:,.0f}".format(p.price) }}</p>
-              <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
-            </div>
+ <!-- Koleksi Unggulan (Slider, pakai data catalog) -->
+<section id="shop" class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-6">
+    <h2 class="text-3xl font-bold text-center mb-12">Koleksi Unggulan</h2>
+    <div class="product-slider overflow-hidden">
+      <div class="flex animate-slide" id="productSlider">
+        {% for item in catalog_items %}
+        <div class="product-slide bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2 flex-shrink-0">
+          <img src="{{ url_for('static', filename=item.image_url) }}" alt="{{ item.name }}" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h3 class="text-lg font-semibold">{{ item.name }}</h3>
+            <p class="text-gray-600 text-sm mt-1">Rp {{ "{:,.0f}".format(item.price) }}</p>
+            <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
           </div>
-          {% endfor %}
-          <!-- Duplicates for looping -->
-          {% for p in products %}
-          <div class="product-slide bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2 flex-shrink-0">
-            <img src="{{ url_for('static', filename=p.image_url) }}" alt="{{ p.name }}" class="w-full h-48 object-cover">
-            <div class="p-4">
-              <h3 class="text-lg font-semibold">{{ p.name }}</h3>
-              <p class="text-gray-600 text-sm mt-1">Rp {{ "{:,.0f}".format(p.price) }}</p>
-              <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
-            </div>
-          </div>
-          {% endfor %}
         </div>
+        {% endfor %}
+        <!-- Duplicates for looping -->
+        {% for item in catalog_items %}
+        <div class="product-slide bg-amber-50 rounded-xl overflow-hidden shadow-md mx-2 flex-shrink-0">
+          <img src="{{ url_for('static', filename=item.image_url) }}" alt="{{ item.name }}" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h3 class="text-lg font-semibold">{{ item.name }}</h3>
+            <p class="text-gray-600 text-sm mt-1">Rp {{ "{:,.0f}".format(item.price) }}</p>
+            <button class="mt-2 bg-amber-600 text-white px-3 py-1 rounded hover:bg-amber-700">Beli</button>
+          </div>
+        </div>
+        {% endfor %}
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- Katalog -->
   <section id="katalog" class="py-20 bg-amber-50">
