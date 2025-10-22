@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nihongo学園 | Kursus Bahasa Jepang</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: #fff8f8; /* lembut kayak sakura */
+    }
+    .navbar {
+      background-color: rgba(230, 0, 18, 0.9); /* merah Jepang */
+      backdrop-filter: blur(5px);
+      transition: all 0.3s ease-in-out;
+    }
+    .navbar.fixed {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      animation: slideDown 0.3s ease-out;
+    }
+    @keyframes slideDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body class="text-gray-800">
+
+  <!-- Navbar -->
+  <nav class="navbar w-full z-50" id="mainNav">
+    <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+      <div class="flex items-center space-x-2">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Flag_of_Japan.svg" alt="Logo" class="w-8 h-8">
+        <h1 class="text-2xl font-bold text-white tracking-wide">Nihongo学園</h1>
+      </div>
+
+      <ul class="hidden md:flex space-x-8 text-white font-medium">
+        <li><a href="#home" class="hover:text-pink-200">Beranda</a></li>
+        <li><a href="#kelas" class="hover:text-pink-200">Kelas</a></li>
+        <li><a href="#budaya" class="hover:text-pink-200">Budaya Jepang</a></li>
+        <li><a href="#tentang" class="hover:text-pink-200">Tentang Kami</a></li>
+        <li><a href="#kontak" class="hover:text-pink-200">Kontak</a></li>
+      </ul>
+
+      <a href="#daftar" class="hidden md:block bg-white text-red-700 font-bold py-2 px-4 rounded-full hover:bg-pink-100 transition">
+        Daftar Sekarang
+      </a>
+    </div>
+  </nav>
+
+  <!-- Contoh Section -->
+  <section id="home" class="min-h-screen flex flex-col justify-center items-center text-center px-6">
+    <h2 class="text-4xl md:text-5xl font-bold text-red-700 mb-4">Selamat Datang di Nihongo学園</h2>
+    <p class="text-lg md:text-xl text-gray-600 max-w-2xl">Belajar Bahasa dan Budaya Jepang bersama pengajar berpengalaman dalam suasana yang menyenangkan dan penuh semangat Jepang 🇯🇵.</p>
+  </section>
+
+  <footer class="bg-red-700 text-white py-6 text-center">
+    <p>&copy; 2025 Nihongo学園 | Belajar Bahasa Jepang dengan Hati 🌸</p>
+  </footer>
+
+  <script>
+    // Sticky Navbar
+    const navbar = document.getElementById('mainNav');
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      if (currentScroll > 50) navbar.classList.add('fixed');
+      else navbar.classList.remove('fixed');
+      lastScroll = currentScroll;
+    });
+  </script>
+</body>
+</html>
