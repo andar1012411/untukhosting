@@ -11,10 +11,10 @@
   "license": "ISC",
   "dependencies": {
     "@tailwindcss/cli": "^4.1.14",
-    "daisyui": "^5.2.3",
+    "daisyui": "^5.3.8",
     "node": "^24.10.0",
     "tailgrid": "^0.1.0",
-    "tailwindcss": "^4.1.14"
+    "tailwindcss": "^4.1.15"
   },
   "repository": {
     "type": "git",
