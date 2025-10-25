@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Genkan Institute - Admin Kelas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-amber-50 text-gray-800 font-sans">
+  <nav class="bg-amber-800 text-white p-4">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold">Genkan Institute - Admin</h1>
+      <a href="{{ url_for('admin_logout') }}" class="hover:text-amber-200">Logout</a>
+    </div>
+  </nav>
+  <div class="max-w-7xl mx-auto px-6 py-8">
+    <h2 class="text-3xl font-bold mb-6">Kelola Kelas</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="mb-4 p-4 rounded-lg {% if category == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    
+    <!-- Form to add new class -->
+    <form method="POST" class="mb-8 bg-white p-6 rounded-xl shadow-md">
+      <input type="hidden" name="action" value="create">
+      <h3 class="text-xl font-semibold mb-4">Tambah Kelas Baru</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="level" class="block text-sm font-medium">Level</label>
+          <input type="text" name="level" id="level" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+        </div>
+        <div>
+          <label for="title" class="block text-sm font-medium">Judul</label>
+          <input type="text" name="title" id="title" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+        </div>
+        <div>
+          <label for="description" class="block text-sm font-medium">Deskripsi</label>
+          <textarea name="description" id="description" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" rows="4" required></textarea>
+        </div>
+        <div>
+          <label for="status" class="block text-sm font-medium">Status</label>
+          <select name="status" id="status" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+            <option value="ongoing">Berlangsung</option>
+            <option value="upcoming">Segera Dibuka</option>
+          </select>
+        </div>
+        <div>
+          <label for="start_date" class="block text-sm font-medium">Tanggal Mulai</label>
+          <input type="date" name="start_date" id="start_date" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+        </div>
+        <div>
+          <label for="schedule" class="block text-sm font-medium">Jadwal</label>
+          <input type="text" name="schedule" id="schedule" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+        </div>
+        <div>
+          <label for="spots_available" class="block text-sm font-medium">Spot Tersedia</label>
+          <input type="number" name="spots_available" id="spots_available" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+        </div>
+        <div>
+          <label for="price" class="block text-sm font-medium">Harga (Rp)</label>
+          <input type="number" name="price" id="price" step="0.01" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+        </div>
+        <div>
+          <label for="image_url" class="block text-sm font-medium">URL Gambar (e.g., image/irodori-a1-a.jpg)</label>
+          <input type="text" name="image_url" id="image_url" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+        </div>
+      </div>
+      <button type="submit" class="mt-4 bg-amber-600 text-white px-6 py-2 rounded-lg hover:bg-amber-700 transition">Tambah</button>
+    </form>
+
+    <!-- List of classes -->
+    <h3 class="text-xl font-semibold mb-4">Daftar Kelas</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for item in kelas_items %}
+      <div class="bg-white rounded-xl p-4 shadow-md">
+        <img src="{{ url_for('static', filename=item.image_url) }}" alt="{{ item.title }}" class="w-full h-48 object-cover rounded-lg">
+        <h4 class="text-lg font-semibold mt-2">{{ item.level }} - {{ item.title }}</h4>
+        <p class="text-gray-600 text-sm">Rp {{ "{:,.0f}".format(item.price) }}</p>
+        <p class="text-gray-600 text-sm">{{ item.description }}</p>
+        <p class="text-gray-600 text-sm">Status: {{ item.status | title }}</p>
+        <p class="text-gray-600 text-sm">Mulai: {{ item.start_date }}</p>
+        <p class="text-gray-600 text-sm">Jadwal: {{ item.schedule }}</p>
+        <p class="text-gray-600 text-sm">Spot: {{ item.spots_available }}</p>
+        <form method="POST" class="mt-4">
+          <input type="hidden" name="action" value="update">
+          <input type="hidden" name="id" value="{{ item._id }}">
+          <div class="grid grid-cols-1 gap-4">
+            <input type="text" name="level" value="{{ item.level }}" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+            <input type="text" name="title" value="{{ item.title }}" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+            <textarea name="description" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" rows="4" required>{{ item.description }}</textarea>
+            <select name="status" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+              <option value="ongoing" {% if item.status == 'ongoing' %}selected{% endif %}>Berlangsung</option>
+              <option value="upcoming" {% if item.status == 'upcoming' %}selected{% endif %}>Segera Dibuka</option>
+            </select>
+            <input type="date" name="start_date" value="{{ item.start_date }}" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+            <input type="text" name="schedule" value="{{ item.schedule }}" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+            <input type="number" name="spots_available" value="{{ item.spots_available }}" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+            <input type="number" name="price" value="{{ item.price }}" step="0.01" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+            <input type="text" name="image_url" value="{{ item.image_url }}" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+            <div class="flex space-x-2">
+              <button type="submit" class="bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700">Update</button>
+              <button type="submit" formaction="{{ url_for('admin_kelas') }}" formmethod="POST" name="action" value="delete" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Hapus</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+{% extends 'header_footer.html' %}
+
+{% block title %}Pengajar - Genkan Institute{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-6">
+    <h2 class="text-4xl font-bold text-center text-blue-500 mb-4">Tim Pengajar Kami</h2>
+    <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+      Temui pengajar kami yang berdedikasi, berpengalaman, dan bersemangat untuk membantu kamu menguasai bahasa dan budaya Jepang. Setiap pengajar telah melalui pelatihan ketat dan memiliki pengalaman internasional.
+    </p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Pengajar 1 -->
+      <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition transform hover:scale-105">
+        <img src="{{ url_for('static', filename='image/pengajar1.jpg') }}" alt="Pengajar 1" onerror="this.src='{{ url_for('static', filename='image/placeholder.jpg') }}'" class="w-full h-48 object-cover rounded-xl mb-4">
+        <h3 class="text-xl font-bold text-blue-500 mb-2">Hiroshi Tanaka</h3>
+        <p class="text-gray-600 text-sm mb-2">Native speaker dengan 10 tahun pengalaman mengajar bahasa Jepang. Spesialis dalam keigo dan budaya bisnis Jepang.</p>
+        <ul class="text-sm text-gray-500 list-disc list-inside mb-4">
+          <li>Sertifikasi JLPT N1 Tutor</li>
+          <li>Pengalaman di Universitas Tokyo</li>
+          <li>Fokus: Bisnis & Etiket Jepang</li>
+        </ul>
+        <a href="#profil-hiroshi" class="text-blue-500 hover:underline">Lihat Profil Lengkap</a>
+      </div>
+      <!-- Pengajar 2 -->
+      <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition transform hover:scale-105">
+        <img src="{{ url_for('static', filename='image/pengajar2.jpg') }}" alt="Pengajar 2" onerror="this.src='{{ url_for('static', filename='image/placeholder.jpg') }}'" class="w-full h-48 object-cover rounded-xl mb-4">
+        <h3 class="text-xl font-bold text-blue-500 mb-2">Yuki Sato</h3>
+        <p class="text-gray-600 text-sm mb-2">Guru bersertifikat JLPT N1 dengan fokus pada percakapan sehari-hari dan budaya pop Jepang seperti anime.</p>
+        <ul class="text-sm text-gray-500 list-disc list-inside mb-4">
+          <li>Sertifikasi Japanese Language Teaching</li>
+          <li>5+ tahun mengajar online</li>
+          <li>Fokus: Anime & Pop Culture</li>
+        </ul>
+        <a href="#profil-yuki" class="text-blue-500 hover:underline">Lihat Profil Lengkap</a>
+      </div>
+      <!-- Pengajar 3 -->
+      <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition transform hover:scale-105">
+        <img src="{{ url_for('static', filename='image/pengajar3.jpg') }}" alt="Pengajar 3" onerror="this.src='{{ url_for('static', filename='image/placeholder.jpg') }}'" class="w-full h-48 object-cover rounded-xl mb-4">
+        <h3 class="text-xl font-bold text-blue-500 mb-2">Aiko Nakamura</h3>
+        <p class="text-gray-600 text-sm mb-2">Pengajar berpengalaman dengan spesialisasi di level pemula (N5-N4) dan pengajaran budaya tradisional Jepang.</p>
+        <ul class="text-sm text-gray-500 list-disc list-inside mb-4">
+          <li>Sertifikasi N5-N4 Specialist</li>
+          <li>Pengalaman di sekolah bahasa Jepang</li>
+          <li>Fokus: Budaya Tradisional</li>
+        </ul>
+        <a href="#profil-aiko" class="text-blue-500 hover:underline">Lihat Profil Lengkap</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

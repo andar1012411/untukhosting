@@ -35,27 +35,25 @@
   <nav class="navbar w-full z-50" id="mainNav">
     <div class="max-w-7xl mx-auto px-6 py-4">
       <div class="flex justify-between items-center">
-      <!-- logo -->
-      <div class="flex items-center space-x-2">
-        <img src="static/image/WhatsApp_Image_2025-10-23_at_20.57.43_41903e9a-removebg-preview.png" alt="Logo" class="w-20 h-20">
-        <h1 class="text-2xl font-bold text-blue tracking-wide">Genkan Institute</h1>
-      </div>
+        <!-- Logo -->
+        <div class="flex items-center space-x-2">
+          <img src="{{ url_for('static', filename='image/WhatsApp_Image_2025-10-23_at_20.57.43_41903e9a-removebg-preview.png') }}" alt="Logo" class="w-20 h-20">
+          <h1 class="text-2xl font-bold text-blue-700 tracking-wide">Genkan Institute</h1>
+        </div>
 
-      <ul class="hidden md:flex space-x-8 text-blue font-medium">
-        <li><a href="#hero" class="text-blue hover:text-blue-500 font-bold">Beranda</a></li>
-        <li><a href="#kelas" class="text-blue hover:text-blue-500 font-bold">Kelas</a></li>
-        <li><a href="#budaya" class="text-blue hover:text-blue-500 font-bold">Budaya Jepang</a></li>
-        <li><a href="#tentang" class="text-blue hover:text-blue-500 font-bold">Tentang Kami</a></li>
-        <li><a href="#kontak" class="text-blue hover:text-blue-500 font-bold">Kontak</a></li>
-      </ul>
-      <a href="{{ url_for('admin_register') }}" class="hidden md:flex bg-blue-700 text-white px-8 py-5 rounded-full font-bold hover:bg-blue-900 transition shadow-lg">
-        Daftar Sekarang
-      </a>
-    </div>
-    
-    <!-- hambuger menu -->
-    <div class="md:hidden items-center">
-          <button id="menu-toggle" class="text-blue focus:outline-none">
+        <!-- Desktop Menu -->
+        <ul class="hidden md:flex space-x-8 text-blue-700 font-medium">
+          <li><a href="#hero" class="hover:text-blue-500 font-bold">Beranda</a></li>
+          <li><a href="#kelas" class="hover:text-blue-500 font-bold">Kelas</a></li>
+          <li><a href="#budaya" class="hover:text-blue-500 font-bold">Budaya Jepang</a></li>
+          <li><a href="/pengajar" class="hover:text-blue-500 font-bold">Pengajar</a></li>
+          <li><a href="/tentang" class="hover:text-blue-500 font-bold">Tentang Kami</a></li>
+          <li><a href="/kontak" class="hover:text-blue-500 font-bold">Kontak</a></li>
+        </ul>
+
+        <!-- Hamburger Menu -->
+        <div class="md:hidden items-center">
+          <button id="menu-toggle" class="text-blue-700 focus:outline-none">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
             </svg>
@@ -63,21 +61,17 @@
         </div>
       </div>
 
-    <!-- mobile menu -->
-    <div id="mobile-menu" class="hidden md:hidden bg-white">
-      <ul class="flex flex-col space-y-4 p-6">
-        <li><a href="#hero" class="text-blue hover:text-blue-500 font-bold">Beranda</a></li>
-        <li><a href="#kelas" class="text-blue hover:text-blue-500 font-bold">Kelas</a></li>
-        <li><a href="#budaya" class="text-blue hover:text-blue-500 font-bold">Budaya Jepang</a></li>
-        <li><a href="#tentang" class="text-blue hover:text-blue-500 font-bold">Tentang Kami</a></li>
-        <li><a href="#kontak" class="text-blue hover:text-blue-500 font-bold">Kontak</a></li>
-        <li>
-          <a href="{{ url_for('admin_register') }}" class="block bg-blue-700 text-white px-8 py-5 rounded-full font-bold hover:bg-blue-900 transition shadow-lg text-center">
-            Daftar Sekarang
-          </a>
-        </li>
-      </ul>
-    </div>
+      <!-- Mobile Menu -->
+      <div id="mobile-menu" class="hidden md:hidden bg-white">
+        <ul class="flex flex-col space-y-4 p-6">
+          <li><a href="#hero" class="text-blue-700 hover:text-blue-500 font-bold">Beranda</a></li>
+          <li><a href="#kelas" class="text-blue-700 hover:text-blue-500 font-bold">Kelas</a></li>
+          <li><a href="#budaya" class="text-blue-700 hover:text-blue-500 font-bold">Budaya Jepang</a></li>
+          <li><a href="/pengajar" class="text-blue-700 hover:text-blue-500 font-bold">Pengajar</a></li>
+          <li><a href="/tentang" class="text-blue-700 hover:text-blue-500 font-bold">Tentang Kami</a></li>
+          <li><a href="/kontak" class="text-blue-700 hover:text-blue-500 font-bold">Kontak</a></li>
+        </ul>
+      </div>
     </div>
   </nav>
 
@@ -86,9 +80,13 @@
     {% endblock %}
   </main>
 
-
   <footer class="bg-blue-800 text-white py-6 text-center">
-    <p>&copy; 2025 Genkan Institute | Your First Step Into Japan 🌸</p>
+    <div class="max-w-7xl mx-auto px-6">
+      <p>&copy; 2025 Genkan Institute | Your First Step Into Japan 🌸</p>
+      <p class="mt-2 text-sm">
+        <a href="{{ url_for('admin_register') }}" class="text-gray-300 hover:text-white underline">Daftar Admin</a>
+      </p>
+    </div>
   </footer>
 
   <script>
@@ -100,7 +98,7 @@
       else navbar.classList.remove('fixed');
       lastScroll = currentScroll;
     });
-    // Mobile Menu Toggle
+
     // Hamburger Menu Toggle
     const menuToggle = document.getElementById('menu-toggle');
     const mobileMenu = document.getElementById('mobile-menu');
@@ -108,7 +106,6 @@
 
     menuToggle.addEventListener('click', () => {
       mobileMenu.classList.toggle('hidden');
-      // Toggle between hamburger and close icon
       if (mobileMenu.classList.contains('hidden')) {
         menuIcon.setAttribute('d', 'M4 6h16M4 12h16m-7 6h7');
       } else {

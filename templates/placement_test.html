@@ -1,0 +1,36 @@
+{% extends 'header_footer.html' %}
+
+{% block title %}Placement Test - Genkan Institute{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-white">
+  <div class="max-w-2xl mx-auto px-6">
+    <h2 class="text-3xl font-bold text-center text-blue-500 mb-6">Placement Test</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="bg-{{ category == 'success' and 'green' or 'red' }}-100 border border-{{ category == 'success' and 'green' or 'red' }}-400 text-{{ category == 'success' and 'green' or 'red' }}-700 px-4 py-3 rounded mb-4">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <form method="POST" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium">Level Terakhir</label>
+        <select name="previous_level" class="w-full px-4 py-2 border rounded-lg">
+          <option value="A1-A">A1-A</option>
+          <option value="A1-C">A1-C</option>
+          <option value="A2-1B">A2-1B</option>
+          <option value="A2-2B">A2-2B</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Skor Tes (0-100)</label>
+        <input type="number" name="score" min="0" max="100" class="w-full px-4 py-2 border rounded-lg" required>
+      </div>
+      <button type="submit" class="w-full bg-blue-700 text-white py-2 rounded-lg hover:bg-blue-900">Submit</button>
+    </form>
+  </div>
+</section>
+{% endblock %}
