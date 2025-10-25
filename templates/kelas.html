@@ -22,23 +22,39 @@
     <div id="schedules-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {% for schedule in schedules %}
       <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition transform hover:-translate-y-1">
-        <img src="{{ url_for('static', filename=schedule.image_url) }}" alt="{{ schedule.title }}" class="w-full h-48 object-cover rounded-xl mb-4">
+        
+        <!-- GAMBAR DARI MONGODB (GridFS) -->
+        {% if schedule.image_id %}
+          <img src="{{ url_for('serve_image', image_id=schedule.image_id) }}" 
+               alt="{{ schedule.title }}" 
+               class="w-full h-48 object-cover rounded-xl mb-4">
+        {% else %}
+          <!-- Fallback jika tidak ada gambar -->
+          <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-48 flex items-center justify-center text-gray-500 text-sm">
+            Gambar tidak tersedia
+          </div>
+        {% endif %}
+
         <div class="mb-2">
-          <span class="inline-block px-3 py-1 text-xs font-bold rounded-full {% if schedule.status == 'ongoing' %}bg-green-200 text-green-800{% else %}bg-yellow-200 text-yellow-800{% endif %}">
+          <span class="inline-block px-3 py-1 text-xs font-bold rounded-full 
+                       {% if schedule.status == 'ongoing' %}bg-green-200 text-green-800
+                       {% else %}bg-yellow-200 text-yellow-800{% endif %}">
             {{ schedule.status | title }}
           </span>
         </div>
         <h3 class="text-xl font-bold text-blue-500 mb-2">{{ schedule.level }}</h3>
         <p class="text-gray-600 text-sm mb-4">{{ schedule.description }}</p>
         <ul class="text-sm text-gray-500 mb-4 space-y-1">
-          <li>📅 Mulai: {{ schedule.start_date }}</li>
-          <li>⏰ Jadwal: {{ schedule.schedule }}</li>
-          <li>💰 Harga: Rp {{ "{:,.0f}".format(schedule.price) }}</li>
-          <li>🎯 Spot Tersisa: {{ schedule.spots_available }}/10</li>
+          <li>Mulai: {{ schedule.start_date }}</li>
+          <li>Jadwal: {{ schedule.schedule }}</li>
+          <li>Harga: Rp {{ "{:,.0f}".format(schedule.price) }}</li>
+          <li>Spot Tersisa: {{ schedule.spots_available }}/10</li>
         </ul>
         <div class="flex space-x-2">
-          <a href="/daftar?level={{ schedule.level }}" class="flex-1 bg-blue-700 text-white py-2 rounded-lg text-center hover:bg-blue-900 transition">Daftar</a>
-          <a href="#jadwal-detail" class="px-4 py-2 bg-white border-2 border-blue-700 text-blue-700 rounded-lg hover:bg-blue-100 transition">Detail</a>
+          <a href="/daftar?level={{ schedule.level }}" 
+             class="flex-1 bg-blue-700 text-white py-2 rounded-lg text-center hover:bg-blue-900 transition">Daftar</a>
+          <a href="#jadwal-detail" 
+             class="px-4 py-2 bg-white border-2 border-blue-700 text-blue-700 rounded-lg hover:bg-blue-100 transition">Detail</a>
         </div>
       </div>
       {% endfor %}
@@ -56,7 +72,8 @@
   function filterSchedules(status) {
     const cards = document.querySelectorAll('#schedules-grid > div');
     cards.forEach(card => {
-      if (status === 'all' || card.querySelector('span').textContent.toLowerCase().includes(status)) {
+      const statusText = card.querySelector('span').textContent.toLowerCase().trim();
+      if (status === 'all' || statusText.includes(status)) {
         card.style.display = 'block';
       } else {
         card.style.display = 'none';

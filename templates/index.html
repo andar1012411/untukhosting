@@ -52,14 +52,10 @@
   <!-- Slider Controls -->
   <div class="absolute bottom-16 left-1/2 transform -translate-x-1/2 z-20 flex space-x-4">
     <button id="prevSlide" class="bg-white/80 text-blue-700 p-3 rounded-full hover:bg-white transition shadow-md">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-      </svg>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
     </button>
     <button id="nextSlide" class="bg-white/80 text-blue-700 p-3 rounded-full hover:bg-white transition shadow-md">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-      </svg>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
     </button>
   </div>
 
@@ -72,7 +68,6 @@
   </div>
 </section>
 
-<!-- Kelas Unggulan -->
 <!-- Kelas Unggulan -->
 <section id="kelas" class="py-20 bg-white">
   <div class="max-w-7xl mx-auto px-6">
@@ -92,23 +87,38 @@
     <div id="schedules-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {% for schedule in schedules %}
       <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition transform hover:-translate-y-1">
-        <img src="{{ url_for('static', filename=schedule.image_url) }}" alt="{{ schedule.title }}" class="w-full h-48 object-cover rounded-xl mb-4">
+        
+        <!-- GAMBAR DARI MONGODB (GridFS) -->
+        {% if schedule.image_id %}
+          <img src="{{ url_for('serve_image', image_id=schedule.image_id) }}" 
+               alt="{{ schedule.title }}" 
+               class="w-full h-48 object-cover rounded-xl mb-4">
+        {% else %}
+          <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-48 flex items-center justify-center text-gray-500 text-sm">
+            Gambar tidak tersedia
+          </div>
+        {% endif %}
+
         <div class="mb-2">
-          <span class="inline-block px-3 py-1 text-xs font-bold rounded-full {% if schedule.status == 'ongoing' %}bg-green-200 text-green-800{% else %}bg-yellow-200 text-yellow-800{% endif %}">
+          <span class="inline-block px-3 py-1 text-xs font-bold rounded-full 
+                       {% if schedule.status == 'ongoing' %}bg-green-200 text-green-800
+                       {% else %}bg-yellow-200 text-yellow-800{% endif %}">
             {{ schedule.status | title }}
           </span>
         </div>
         <h3 class="text-xl font-bold text-blue-500 mb-2">{{ schedule.level }}: {{ schedule.title }}</h3>
         <p class="text-gray-600 mb-4">{{ schedule.description[:100] }}...</p>
         <ul class="text-sm text-gray-500 mb-4 space-y-1">
-          <li>📅 Mulai: {{ schedule.start_date }}</li>
-          <li>⏰ Jadwal: {{ schedule.schedule }}</li>
-          <li>💰 Harga: Rp {{ "{:,.0f}".format(schedule.price) }}</li>
-          <li>🎯 Spot Tersisa: {{ schedule.spots_available }}/10</li>
+          <li>Mulai: {{ schedule.start_date }}</li>
+          <li>Jadwal: {{ schedule.schedule }}</li>
+          <li>Harga: Rp {{ "{:,.0f}".format(schedule.price) }}</li>
+          <li>Spot Tersisa: {{ schedule.spots_available }}/10</li>
         </ul>
         <div class="flex space-x-2">
-          <a href="/daftar?level={{ schedule.level }}" class="flex-1 bg-blue-700 text-white py-2 rounded-lg text-center hover:bg-blue-900 transition">Daftar</a>
-          <a href="#jadwal-detail" class="px-4 py-2 bg-white border-2 border-blue-700 text-blue-700 rounded-lg hover:bg-blue-100 transition">Detail</a>
+          <a href="/daftar?level={{ schedule.level }}" 
+             class="flex-1 bg-blue-700 text-white py-2 rounded-lg text-center hover:bg-blue-900 transition">Daftar</a>
+          <a href="#jadwal-detail" 
+             class="px-4 py-2 bg-white border-2 border-blue-700 text-blue-700 rounded-lg hover:bg-blue-100 transition">Detail</a>
         </div>
       </div>
       {% endfor %}
@@ -120,12 +130,13 @@
   </div>
 </section>
 
-<!-- JavaScript untuk Filter (sederhana, tanpa library) -->
+<!-- JavaScript untuk Filter -->
 <script>
   function filterSchedules(status) {
     const cards = document.querySelectorAll('#schedules-grid > div');
     cards.forEach(card => {
-      if (status === 'all' || card.querySelector('span').textContent.toLowerCase().includes(status)) {
+      const statusText = card.querySelector('span').textContent.toLowerCase().trim();
+      if (status === 'all' || statusText.includes(status)) {
         card.style.display = 'block';
       } else {
         card.style.display = 'none';
@@ -134,69 +145,87 @@
   }
 </script>
 
-<!-- Budaya Jepang -->
-<section id="budaya" class="py-20 bg-blue-100">
+<!-- Informasi Menarik -->
+<section id="budaya" class="py-20 bg-white">
   <div class="max-w-7xl mx-auto px-6">
-    <h2 class="text-4xl font-bold text-center text-blue-500 mb-4">Kenali Budaya Jepang</h2>
+    <h2 class="text-4xl font-bold text-center text-blue-500 mb-4">Informasi Menarik: Trivia Budaya Jepang</h2>
     <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-      Bukan hanya bahasa, kami ajarkan nilai, etika, dan keindahan Jepang.
+      Temukan fakta-fakta unik tentang budaya Jepang yang bikin kamu semakin jatuh cinta dengan negeri Sakura!
     </p>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div class="text-center">
-        <div class="bg-white w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl shadow-md">🍵</div>
-        <h3 class="font-semibold text-blue-500">Upacara Teh</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="bg-blue-50 p-6 rounded-xl shadow-md hover:shadow-lg transition">
+        <h3 class="text-lg font-semibold text-blue-500 mb-2">Onigiri: Makanan Praktis Jepang</h3>
+        <p class="text-gray-600 text-sm">
+          Onigiri, bola nasi dengan isian seperti umeboshi atau salmon, adalah camilan populer di Jepang. Tahukah kamu? Onigiri sudah ada sejak abad ke-11 dan sering dibawa samurai sebagai bekal!
+        </p>
       </div>
-      <div class="text-center">
-        <div class="bg-white w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl shadow-md">🎋</div>
-        <h3 class="font-semibold text-blue-500">Tanabata</h3>
+      <div class="bg-blue-50 p-6 rounded-xl shadow-md hover:shadow-lg transition">
+        <h3 class="text-lg font-semibold text-blue-500 mb-2">Hanami: Pesta Bunga Sakura</h3>
+        <p class="text-gray-600 text-sm">
+          Setiap musim semi, orang Jepang mengadakan <em>hanami</em>, piknik di bawah pohon sakura yang sedang mekar. Tradisi ini sudah berlangsung sejak era Nara (710-794)!
+        </p>
       </div>
-      <div class="text-center">
-        <div class="bg-white w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl shadow-md">⛩️</div>
-        <h3 class="font-semibold text-blue-500">Kuil & Kuil</h3>
+      <div class="bg-blue-50 p-6 rounded-xl shadow-md hover:shadow-lg transition">
+        <h3 class="text-lg font-semibold text-blue-500 mb-2">Omikuji: Ramalan Keberuntungan</h3>
+        <p class="text-gray-600 text-sm">
+          Di kuil Shinto, kamu bisa mengambil <em>omikuji</em>, kertas ramalan. Jika ramalannya buruk, ikat kertas itu di pohon agar nasib buruk pergi!
+        </p>
       </div>
-      <div class="text-center">
-        <div class="bg-white w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl shadow-md">🍡</div>
-        <h3 class="font-semibold text-blue-500">Kuliner Jepang</h3>
+      <div class="bg-blue-50 p-6 rounded-xl shadow-md hover:shadow-lg transition">
+        <h3 class="text-lg font-semibold text-blue-500 mb-2">Kucing Maneki-neko</h3>
+        <p class="text-gray-600 text-sm">
+          Patung kucing dengan tangan terangkat (<em>maneki-neko</em>) dipercaya membawa keberuntungan. Tangan kiri mengundang pelanggan, sedangkan tangan kanan mengundang uang!
+        </p>
+      </div>
+      <div class="bg-blue-50 p-6 rounded-xl shadow-md hover:shadow-lg transition">
+        <h3 class="text-lg font-semibold text-blue-500 mb-2">Tatami: Alas Tradisional</h3>
+        <p class="text-gray-600 text-sm">
+          Tikar tatami terbuat dari jerami dan digunakan di rumah tradisional Jepang. Ukuran ruangan di Jepang dihitung berdasarkan jumlah tatami, misalnya "ruangan 6 tatami"!
+        </p>
+      </div>
+      <div class="bg-blue-50 p-6 rounded-xl shadow-md hover:shadow-lg transition">
+        <h3 class="text-lg font-semibold text-blue-500 mb-2">Bento: Seni Makan Siang</h3>
+        <p class="text-gray-600 text-sm">
+          Kotak bento bukan cuma makanan, tapi seni! Ibu-ibu di Jepang sering membuat <em>kyaraben</em>, bento dengan bentuk karakter lucu untuk anak-anak.
+        </p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Testimoni -->
-<section class="py-20 bg-white">
+<!-- Tentang Kami -->
+<section class="py-20 bg-blue-50">
   <div class="max-w-7xl mx-auto px-6">
-    <h2 class="text-4xl font-bold text-center text-blue-500 mb-12">Apa Kata Mereka?</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div class="bg-white p-6 rounded-xl shadow-md">
-        <p class="text-gray-700 italic">"Dari nol sampai bisa ngobrol sama orang Jepang! Sensei-nya sabar banget."</p>
-        <div class="mt-4 flex items-center">
-          <div class="bg-gray-200 border-2 border-dashed rounded-full w-12 h-12"></div>
-          <div class="ml-3">
-            <p class="font-semibold text-black">Alya</p>
-            <p class="text-sm text-gray-500">Lulus N4</p>
-          </div>
-        </div>
+    <h2 class="text-4xl font-bold text-center text-blue-500 mb-4">Tentang Kami</h2>
+    <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+      Genkan Institute adalah lembaga kursus bahasa Jepang online yang berdedikasi untuk membawa pengalaman belajar autentik dan budaya Jepang langsung ke kamu.
+    </p>
+    <div class="space-y-12">
+      <div>
+        <h3 class="text-xl font-semibold text-blue-500 mb-2">Misi Kami</h3>
+        <p class="text-gray-600">
+          Kami bertujuan untuk membuat pembelajaran bahasa Jepang mudah, menyenangkan, dan relevan dengan kebutuhan modern. Dengan pengajar native dan berpengalaman, kami fokus pada percakapan praktis dan pemahaman budaya Jepang yang mendalam.
+        </p>
       </div>
-      <div class="bg-white p-6 rounded-xl shadow-md">
-        <p class="text-gray-700 italic">"Metode belajarnya fun, nggak ngebosenin. Sekarang aku kerja di Jepang!"</p>
-        <div class="mt-4 flex items-center">
-          <div class="bg-gray-200 border-2 border-dashed rounded-full w-12 h-12"></div>
-          <div class="ml-3">
-            <p class="font-semibold text-black">Rizky</p>
-            <p class="text-sm text-gray-500">Lulus N2</p>
-          </div>
-        </div>
+      <div>
+        <h3 class="text-xl font-semibold text-blue-500 mb-2">Visi Kami</h3>
+        <p class="text-gray-600">
+          Menjadi jembatan utama bagi siapa saja yang ingin menjelajahi bahasa dan budaya Jepang, baik untuk karir, studi, atau kecintaan pada budaya pop Jepang seperti anime dan dorama.
+        </p>
       </div>
-      <div class="bg-white p-6 rounded-xl shadow-md">
-        <p class="text-gray-700 italic">"Aku suka sesi budaya & praktek langsung. Rasanya kayak di Jepang!"</p>
-        <div class="mt-4 flex items-center">
-          <div class="bg-gray-200 border-2 border-dashed rounded-full w-12 h-12"></div>
-          <div class="ml-3">
-            <p class="font-semibold text-black">Salsa</p>
-            <p class="text-sm text-gray-500">Peserta N5</p>
-          </div>
-        </div>
+      <div>
+        <h3 class="text-xl font-semibold text-blue-500 mb-2">Mengapa Memilih Kami?</h3>
+        <ul class="list-disc list-inside text-gray-600 space-y-2">
+          <li>Pengajar native dan bersertifikat dengan pengalaman mengajar internasional.</li>
+          <li>Kurikulum Irodori yang dirancang untuk percakapan sehari-hari dan kebutuhan praktis.</li>
+          <li>Kelas online fleksibel dengan jadwal yang cocok untuk pelajar dan profesional.</li>
+          <li>Pelajaran budaya Jepang untuk pengalaman belajar yang lebih kaya.</li>
+          <li>Dukungan 24/7 dan komunitas siswa aktif.</li>
+        </ul>
       </div>
+    </div>
+    <div class="text-center mt-8">
+      <a href="/tentang" class="text-blue-700 underline hover:text-blue-500">Pelajari lebih lanjut tentang kami</a>
     </div>
   </div>
 </section>
@@ -220,6 +249,42 @@
         Daftar Konsultasi Gratis
       </button>
     </form>
+  </div>
+</section>
+
+<!-- Kontak -->
+<section id="kontak" class="py-20 bg-gradient-to-r from-blue-600 to-sky-300 text-white">
+  <div class="max-w-4xl mx-auto px-6">
+    <h2 class="text-4xl font-bold text-center mb-4">Hubungi Kami</h2>
+    <p class="text-center mb-12 max-w-2xl mx-auto">
+      Punya pertanyaan? Kirim pesan dan kami akan balas segera!
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Contact Form -->
+      <form method="POST" action="{{ url_for('kontak') }}" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium">Nama Lengkap</label>
+          <input type="text" name="nama" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-white bg-white text-gray-800" required>
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Email</label>
+          <input type="email" name="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-white bg-white text-gray-800" required>
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Pesan</label>
+          <textarea name="pesan" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-white bg-white text-gray-800" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="w-full bg-white text-blue-700 py-2 rounded-lg hover:bg-gray-100 transition">Kirim Pesan</button>
+      </form>
+      <!-- Contact Info -->
+      <div class="space-y-4">
+        <h3 class="text-xl font-semibold">Informasi Kontak</h3>
+        <p class="text-gray-200"><strong>Email:</strong> info@genkaninstitute.com</p>
+        <p class="text-gray-200"><strong>WhatsApp:</strong> +62 812-1230-3212</p>
+        <p class="text-gray-200"><strong>Alamat:</strong> Jl. Sakura No. 123, Jakarta, Indonesia</p>
+        <p class="text-gray-200"><strong>Jam Operasional:</strong> Senin - Jumat, 09:00 - 17:00 WIB</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -250,38 +315,4 @@
   showSlide(currentSlide);
   setInterval(nextSlide, 5000);
 </script>
-<section id="kontak" class="py-20 bg-gradient-to-r from-blue-600 to-sky-300 text-white">
-  <div class="max-w-4xl mx-auto px-6">
-    <h2 class="text-4xl font-bold text-center mb-4">Hubungi Kami</h2>
-    <p class="text-center mb-12 max-w-2xl mx-auto">
-      Punya pertanyaan? Kirim pesan dan kami akan balas segera!
-    </p>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <!-- Contact Form -->
-      <form method="POST" action="{{ url_for('kontak') }}" class="space-y-4">
-        <div>
-          <label class="block text-sm font-medium">Nama Lengkap</label>
-          <input type="text" name="nama" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-white bg-white text-gray-800" required>
-        </div>
-        <div>
-          <label class="block text-sm font-medium">Email</label>
-          <input type="email" name="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-white bg-white text-gray-800" required>
-        </div>
-        <div>
-          <label class="block text-sm font-medium">Pesan</label>
-          <textarea name="pesan" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-white bg-white text-gray-800" rows="5" required></textarea>
-        </div>
-        <button type="submit" class="w-full bg-white text-blue-700 py-2 rounded-lg hover:bg-gray-100 transition">Kirim Pesan</button>
-      </form>
-      <!-- Contact Info -->
-      <div class="space-y-4">
-        <h3 class="text-xl font-semibold">Informasi Kontak</h3>
-        <p class="text-gray-200"><strong>Email:</strong> info@genkaninstitute.com</p>
-        <p class="text-gray-200"><strong>WhatsApp:</strong> +62 812-3456-7890</p>
-        <p class="text-gray-200"><strong>Alamat:</strong> Jl. Sakura No. 123, Jakarta, Indonesia</p>
-        <p class="text-gray-200"><strong>Jam Operasional:</strong> Senin - Jumat, 09:00 - 17:00 WIB</p>
-      </div>
-    </div>
-  </div>
-</section>
 {% endblock %}

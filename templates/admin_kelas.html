@@ -25,87 +25,108 @@
       {% endif %}
     {% endwith %}
     
-    <!-- Form to add new class -->
-    <form method="POST" class="mb-8 bg-white p-6 rounded-xl shadow-md">
+    <!-- FORM TAMBAH KELAS -->
+    <form method="POST" enctype="multipart/form-data" class="mb-8 bg-white p-6 rounded-xl shadow-md">
       <input type="hidden" name="action" value="create">
       <h3 class="text-xl font-semibold mb-4">Tambah Kelas Baru</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label for="level" class="block text-sm font-medium">Level</label>
-          <input type="text" name="level" id="level" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+          <label class="block text-sm font-medium mb-1">Level</label>
+          <input type="text" name="level" placeholder="N5" required class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-amber-500">
         </div>
         <div>
-          <label for="title" class="block text-sm font-medium">Judul</label>
-          <input type="text" name="title" id="title" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+          <label class="block text-sm font-medium mb-1">Judul</label>
+          <input type="text" name="title" placeholder="Kelas Pemula N5" required class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-amber-500">
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium mb-1">Deskripsi</label>
+          <textarea name="description" rows="3" required class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-amber-500"></textarea>
         </div>
         <div>
-          <label for="description" class="block text-sm font-medium">Deskripsi</label>
-          <textarea name="description" id="description" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" rows="4" required></textarea>
-        </div>
-        <div>
-          <label for="status" class="block text-sm font-medium">Status</label>
-          <select name="status" id="status" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+          <label class="block text-sm font-medium mb-1">Status</label>
+          <select name="status" required class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-amber-500">
             <option value="ongoing">Berlangsung</option>
             <option value="upcoming">Segera Dibuka</option>
           </select>
         </div>
         <div>
-          <label for="start_date" class="block text-sm font-medium">Tanggal Mulai</label>
-          <input type="date" name="start_date" id="start_date" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+          <label class="block text-sm font-medium mb-1">Tanggal Mulai</label>
+          <input type="date" name="start_date" required class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-amber-500">
         </div>
         <div>
-          <label for="schedule" class="block text-sm font-medium">Jadwal</label>
-          <input type="text" name="schedule" id="schedule" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+          <label class="block text-sm font-medium mb-1">Jadwal</label>
+          <input type="text" name="schedule" placeholder="Senin & Rabu, 19:00" required class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-amber-500">
         </div>
         <div>
-          <label for="spots_available" class="block text-sm font-medium">Spot Tersedia</label>
-          <input type="number" name="spots_available" id="spots_available" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+          <label class="block text-sm font-medium mb-1">Spot Tersedia</label>
+          <input type="number" name="spots_available" value="10" required class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-amber-500">
         </div>
         <div>
-          <label for="price" class="block text-sm font-medium">Harga (Rp)</label>
-          <input type="number" name="price" id="price" step="0.01" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+          <label class="block text-sm font-medium mb-1">Harga (Rp)</label>
+          <input type="number" name="price" step="0.01" placeholder="500000" required class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-amber-500">
         </div>
-        <div>
-          <label for="image_url" class="block text-sm font-medium">URL Gambar (e.g., image/irodori-a1-a.jpg)</label>
-          <input type="text" name="image_url" id="image_url" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium mb-1">Gambar Kelas</label>
+          <input type="file" name="image_file" accept="image/*" required class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-amber-500">
         </div>
       </div>
-      <button type="submit" class="mt-4 bg-amber-600 text-white px-6 py-2 rounded-lg hover:bg-amber-700 transition">Tambah</button>
+      <button type="submit" class="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">Tambah Kelas</button>
     </form>
 
-    <!-- List of classes -->
+    <!-- DAFTAR KELAS -->
     <h3 class="text-xl font-semibold mb-4">Daftar Kelas</h3>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {% for item in kelas_items %}
       <div class="bg-white rounded-xl p-4 shadow-md">
-        <img src="{{ url_for('static', filename=item.image_url) }}" alt="{{ item.title }}" class="w-full h-48 object-cover rounded-lg">
+        <!-- GAMBAR DARI MONGODB -->
+        {% if item.image_id %}
+          <img src="{{ url_for('serve_image', image_id=item.image_id) }}" alt="{{ item.title }}" class="w-full h-48 object-cover rounded-lg">
+        {% else %}
+          <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-48 flex items-center justify-center text-gray-500">
+            Tidak ada gambar
+          </div>
+        {% endif %}
+
         <h4 class="text-lg font-semibold mt-2">{{ item.level }} - {{ item.title }}</h4>
         <p class="text-gray-600 text-sm">Rp {{ "{:,.0f}".format(item.price) }}</p>
-        <p class="text-gray-600 text-sm">{{ item.description }}</p>
         <p class="text-gray-600 text-sm">Status: {{ item.status | title }}</p>
         <p class="text-gray-600 text-sm">Mulai: {{ item.start_date }}</p>
         <p class="text-gray-600 text-sm">Jadwal: {{ item.schedule }}</p>
         <p class="text-gray-600 text-sm">Spot: {{ item.spots_available }}</p>
-        <form method="POST" class="mt-4">
+
+        <!-- FORM UPDATE & DELETE -->
+        <form method="POST" enctype="multipart/form-data" class="mt-4">
           <input type="hidden" name="action" value="update">
           <input type="hidden" name="id" value="{{ item._id }}">
-          <div class="grid grid-cols-1 gap-4">
-            <input type="text" name="level" value="{{ item.level }}" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
-            <input type="text" name="title" value="{{ item.title }}" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
-            <textarea name="description" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" rows="4" required>{{ item.description }}</textarea>
-            <select name="status" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+
+          <div class="grid grid-cols-1 gap-3 text-sm">
+            <input type="text" name="level" value="{{ item.level }}" required class="px-3 py-1 rounded border">
+            <input type="text" name="title" value="{{ item.title }}" required class="px-3 py-1 rounded border">
+            <textarea name="description" required class="px-3 py-1 rounded border" rows="2">{{ item.description }}</textarea>
+            <select name="status" required class="px-3 py-1 rounded border">
               <option value="ongoing" {% if item.status == 'ongoing' %}selected{% endif %}>Berlangsung</option>
               <option value="upcoming" {% if item.status == 'upcoming' %}selected{% endif %}>Segera Dibuka</option>
             </select>
-            <input type="date" name="start_date" value="{{ item.start_date }}" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
-            <input type="text" name="schedule" value="{{ item.schedule }}" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
-            <input type="number" name="spots_available" value="{{ item.spots_available }}" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
-            <input type="number" name="price" value="{{ item.price }}" step="0.01" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
-            <input type="text" name="image_url" value="{{ item.image_url }}" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500" required>
-            <div class="flex space-x-2">
-              <button type="submit" class="bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700">Update</button>
-              <button type="submit" formaction="{{ url_for('admin_kelas') }}" formmethod="POST" name="action" value="delete" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Hapus</button>
+            <input type="date" name="start_date" value="{{ item.start_date }}" required class="px-3 py-1 rounded border">
+            <input type="text" name="schedule" value="{{ item.schedule }}" required class="px-3 py-1 rounded border">
+            <input type="number" name="spots_available" value="{{ item.spots_available }}" required class="px-3 py-1 rounded border">
+            <input type="number" name="price" value="{{ item.price }}" step="0.01" required class="px-3 py-1 rounded border">
+
+            <!-- GAMBAR: Preview + Upload Baru -->
+            <div>
+              <label class="block text-xs font-medium mb-1">Ganti Gambar (kosongkan jika tidak ingin ganti)</label>
+              {% if item.image_id %}
+                <img src="{{ url_for('serve_image', image_id=item.image_id) }}" class="w-full h-24 object-cover rounded mb-1">
+              {% endif %}
+              <input type="file" name="image_file" accept="image/*" class="text-xs">
             </div>
+          </div>
+
+          <div class="flex gap-2 mt-3">
+            <button type="submit" class="flex-1 bg-amber-600 text-white text-sm px-3 py-1 rounded hover:bg-amber-700">Update</button>
+            <button type="submit" name="action" value="delete" 
+                    onclick="return confirm('Yakin hapus kelas ini? Gambar akan ikut terhapus.')"
+                    class="flex-1 bg-red-600 text-white text-sm px-3 py-1 rounded hover:bg-red-700">Hapus</button>
           </div>
         </form>
       </div>
