@@ -36,19 +36,22 @@
     <div class="max-w-7xl mx-auto px-6 py-4">
       <div class="flex justify-between items-center">
         <!-- Logo -->
-        <div class="flex items-center space-x-2">
-          <img src="{{ url_for('static', filename='image/WhatsApp_Image_2025-10-23_at_20.57.43_41903e9a-removebg-preview.png') }}" alt="Logo" class="w-20 h-20">
+        <div class="flex items-start space-x-4"> <!-- Ubah items-center ke items-start untuk alignment atas -->
+        <img src="{{ url_for('static', filename='image/WhatsApp_Image_2025-10-23_at_20.57.43_41903e9a-removebg-preview.png') }}" alt="Logo" class="w-20 h-20 flex-shrink-0"> <!-- Tambah flex-shrink-0 agar logo tidak menyusut -->
+        <div class="flex flex-col space-y-55"> <!-- Gunakan flex-col untuk vertikal, space-y-0 untuk jarak vertikal kecil -->
+          <h2 class="text-xl pl-1 pt-2 font-semibold text-blue-700 tracking-wide leading-tight">玄関研究所</h2> <!-- Ukuran lebih kecil (text-sm) dan leading-tight untuk rapat -->
           <h1 class="text-2xl font-bold text-blue-700 tracking-wide">Genkan Institute</h1>
         </div>
+      </div>
 
         <!-- Desktop Menu -->
         <ul class="hidden md:flex space-x-8 text-blue-700 font-medium">
-          <li><a href="/index" class="hover:text-blue-500 font-bold">Beranda</a></li>
+          <li><a href="{{ url_for('index') }}" class="hover:text-blue-500 font-bold">Beranda</a></li>
           <li><a href="#kelas" class="hover:text-blue-500 font-bold">Kelas</a></li>
           <li><a href="#budaya" class="hover:text-blue-500 font-bold">Budaya Jepang</a></li>
           <li><a href="/pengajar" class="hover:text-blue-500 font-bold">Pengajar</a></li>
-          <li><a href="/tentang" class="hover:text-blue-500 font-bold">Tentang Kami</a></li>
-          <li><a href="/kontak" class="hover:text-blue-500 font-bold">Kontak</a></li>
+          <li><a href="#tentang" class="hover:text-blue-500 font-bold">Tentang Kami</a></li>
+          <li><a href="#kontak" class="hover:text-blue-500 font-bold">Kontak</a></li>
         </ul>
 
         <!-- Hamburger Menu -->
@@ -64,8 +67,8 @@
       <!-- Mobile Menu -->
       <div id="mobile-menu" class="hidden md:hidden bg-white">
         <ul class="flex flex-col space-y-4 p-6">
-          <li><a href="" class="text-blue-700 hover:text-blue-500 font-bold">Beranda</a></li>
-          <li><a href="#kelas" class="text-blue-700 hover:text-blue-500 font-bold">Kelas</a></li>
+          <li><a href="/index" class="text-blue-700 hover:text-blue-500 font-bold">Beranda</a></li>
+          <li><a href="/kelas" class="text-blue-700 hover:text-blue-500 font-bold">Kelas</a></li>
           <li><a href="#budaya" class="text-blue-700 hover:text-blue-500 font-bold">Budaya Jepang</a></li>
           <li><a href="/pengajar" class="text-blue-700 hover:text-blue-500 font-bold">Pengajar</a></li>
           <li><a href="/tentang" class="text-blue-700 hover:text-blue-500 font-bold">Tentang Kami</a></li>
@@ -112,6 +115,16 @@
         menuIcon.setAttribute('d', 'M6 18L18 6M6 6l12 12');
       }
     });
-  </script>
+
+    // Smooth Scroll for Anchor Links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.querySelector(this.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  });
+</script>
 </body>
 </html>

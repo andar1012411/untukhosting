@@ -8,12 +8,21 @@ from dotenv import load_dotenv
 import os
 import io
 from datetime import datetime
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 # Load environment variables
-load_dotenv()
+load_dotenv()  # Ensure this is called before using os.getenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'your_default_secret_key_here')
+
+# Debug: Print environment variables to verify they are loaded
+print("Loaded environment variables:")
+print(f"EMAIL_USERNAME: {os.getenv('EMAIL_USERNAME')}")
+print(f"EMAIL_PASSWORD: {os.getenv('EMAIL_PASSWORD')}")
+print(f"EMAIL_RECIPIENT: {os.getenv('EMAIL_RECIPIENT')}")
 
 # Session config
 app.config['SESSION_PERMANENT'] = False
@@ -24,6 +33,14 @@ app.config['MONGO_URI'] = os.getenv('MONGO_URI')
 mongo_client = MongoClient(app.config['MONGO_URI'])
 db = mongo_client['genkan_institute']
 fs = GridFS(db)  # GridFS for images
+
+# Email configuration
+EMAIL_USERNAME = os.getenv('EMAIL_USERNAME')
+EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
+EMAIL_RECIPIENT = os.getenv('EMAIL_RECIPIENT')
+
+if not all([EMAIL_USERNAME, EMAIL_PASSWORD, EMAIL_RECIPIENT]):
+    print("Warning: One or more email configuration variables are missing!")
 
 # Flask-Login
 login_manager = LoginManager()
@@ -85,18 +102,41 @@ def kontak():
         email = request.form.get('email')
         pesan = request.form.get('pesan')
         try:
+            # Save to MongoDB
             db.kontak.insert_one({
                 "nama": nama,
                 "email": email,
                 "pesan": pesan,
                 "tanggal": datetime.utcnow()
             })
+
+            # Send email
+            msg = MIMEMultipart()
+            msg['From'] = EMAIL_USERNAME
+            msg['To'] = EMAIL_RECIPIENT
+            msg['Subject'] = f'New Contact Form Submission from {nama}'
+            body = f"""
+            New message from contact form:
+            Name: {nama}
+            Email: {email}
+            Message: {pesan}
+            Submitted on: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}
+            """
+            msg.attach(MIMEText(body, 'plain'))
+
+            # Connect to Gmail's SMTP server
+            server = smtplib.SMTP('smtp.gmail.com', 587)
+            server.starttls()
+            server.login(EMAIL_USERNAME, EMAIL_PASSWORD)
+            server.sendmail(EMAIL_USERNAME, EMAIL_RECIPIENT, msg.as_string())
+            server.quit()
+
             flash("Pesan terkirim! Kami akan balas secepatnya.", "success")
             return redirect(url_for('kontak'))
         except Exception as e:
             print(f"Kontak error: {e}")
-            flash("Gagal mengirim pesan.", "error")
-        return render_template('kontak.html')
+            flash(f"Gagal mengirim pesan: {str(e)}", "error")
+    return render_template('kontak.html')
 
 @app.route('/daftar', methods=['GET', 'POST'])
 def daftar():
@@ -240,6 +280,9 @@ def admin_kelas():
         flash("Gagal memuat daftar kelas.", "error")
     return render_template('admin_kelas.html', kelas_items=kelas_items)
 
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('error.html', message="Something went wrong. Please try again."), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
