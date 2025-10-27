@@ -3,81 +3,159 @@
 {% block title %}Kelas - Genkan Institute{% endblock %}
 
 {% block content %}
-<!-- Kelas Unggulan -->
-<section class="py-20 bg-white">
-  <div class="max-w-7xl mx-auto px-6">
-    <h2 class="text-4xl font-bold text-center text-blue-500 mb-4">Kelas Irodori Saat Ini & Segera Dibuka</h2>
-    <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-      Pilih level PERCAKAPAN ala Irodori (A1-A2). Lihat batch yang sedang berlangsung atau segera dibuka. Siswa lama? Coba <a href="/placement-test" class="text-blue-700 underline">Placement Test Gratis</a> untuk lanjut tanpa mulai dari awal!
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-blue-50 to-white py-20">
+  <div class="max-w-7xl mx-auto px-6 text-center">
+    <h1 class="text-5xl font-bold text-blue-700 mb-4">Kelas Bahasa Jepang Irodori</h1>
+    <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+      Belajar bahasa Jepang praktis untuk kehidupan sehari-hari dengan kurikulum <strong>Irodori</strong> dari Japan Foundation. 
+      Sistem <strong>batch/semester</strong>: kamu belajar bareng satu angkatan dari A1-A sampai A2-2B.
     </p>
-    
-    <!-- Filter Tabs -->
-    <div class="flex justify-center mb-8 space-x-4">
-      <button class="px-4 py-2 bg-blue-500 text-white rounded-lg" onclick="filterSchedules('all')">Semua</button>
-      <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg" onclick="filterSchedules('ongoing')">Berlangsung</button>
-      <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg" onclick="filterSchedules('upcoming')">Segera Dibuka</button>
-    </div>
-    
-    <!-- Grid Kelas -->
-    <div id="schedules-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <a href="#daftar" class="bg-blue-700 text-white px-8 py-3 rounded-lg text-lg hover:bg-blue-900 transition inline-block">
+      Daftar Kelas Sekarang
+    </a>
+  </div>
+</section>
+
+<!-- Filter Tabs -->
+
+
+<!-- Daftar Kelas -->
+<section class="py-16 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-6">
+    <div id="kelas-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {% for schedule in schedules %}
-      <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition transform hover:-translate-y-1">
+      <div class="kelas-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1"
+           data-status="{{ schedule.status }}">
         
-        <!-- GAMBAR DARI MONGODB (GridFS) -->
+        <!-- Gambar -->
         {% if schedule.image_id %}
           <img src="{{ url_for('serve_image', image_id=schedule.image_id) }}" 
-               alt="{{ schedule.title }}" 
-               class="w-full h-48 object-cover rounded-xl mb-4">
+               alt="{{ schedule.level }}" 
+               class="w-full h-48 object-cover">
         {% else %}
-          <!-- Fallback jika tidak ada gambar -->
-          <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-48 flex items-center justify-center text-gray-500 text-sm">
+          <div class="bg-gray-200 border-2 border-dashed rounded-t-2xl w-full h-48 flex items-center justify-center text-gray-500">
             Gambar tidak tersedia
           </div>
         {% endif %}
 
-        <div class="mb-2">
-          <span class="inline-block px-3 py-1 text-xs font-bold rounded-full 
-                       {% if schedule.status == 'ongoing' %}bg-green-200 text-green-800
-                       {% else %}bg-yellow-200 text-yellow-800{% endif %}">
-            {{ schedule.status | title }}
-          </span>
+        <div class="p-6">
+          <!-- Status Badge -->
+          <div class="mb-3">
+            <span class="inline-block px-3 py-1 text-xs font-bold rounded-full
+                         {% if schedule.status == 'ongoing' %}bg-green-100 text-green-800
+                         {% else %}bg-yellow-100 text-yellow-800{% endif %}">
+              {{ 'Sedang Berlangsung' if schedule.status == 'ongoing' else 'Segera Dibuka' }}
+            </span>
+          </div>
+
+          <!-- Level & Judul -->
+          <h3 class="text-2xl font-bold text-blue-700 mb-2">{{ schedule.level }}</h3>
+          <p class="text-lg font-medium text-gray-800 mb-3">{{ schedule.title }}</p>
+
+          <!-- Deskripsi Singkat -->
+          <p class="text-gray-600 text-sm mb-4 line-clamp-3">{{ schedule.description }}</p>
+
+          <!-- Info Detail -->
+          <div class="space-y-2 text-sm text-gray-600 mb-5">
+            <p><strong>Mulai:</strong> {{ schedule.start_date }}</p>
+            <p><strong>Jadwal:</strong> {{ schedule.schedule }}</p>
+            <p><strong>Batch:</strong> {{ schedule.batch_id or 'Belum ditentukan' }}</p>
+            <p><strong>Prasyarat:</strong> 
+              <span class="text-blue-600 font-medium">
+                {{ schedule.prerequisite_level or 'Tidak ada' }}
+              </span>
+            </p>
+            <p><strong>Harga:</strong> Rp {{ "{:,.0f}".format(schedule.price) }}</p>
+            <p><strong>Spot Tersisa:</strong> 
+              <span class="{% if schedule.spots_available > 0 %}text-green-600{% else %}text-red-600{% endif %} font-bold">
+                {{ schedule.spots_available }}/10
+              </span>
+            </p>
+          </div>
+
+          <!-- Tombol Aksi -->
+          <div class="flex space-x-3">
+            {% if schedule.spots_available > 0 %}
+              <a href="{{ url_for('daftar') }}?level={{ schedule.level }}" 
+                 class="flex-1 bg-blue-700 text-white text-center py-2 rounded-lg hover:bg-blue-800 transition font-medium">
+                Daftar
+              </a>
+            {% else %}
+              <button disabled class="flex-1 bg-gray-400 text-white py-2 rounded-lg cursor-not-allowed font-medium">
+                Penuh
+              </button>
+            {% endif %}
+
+            <a href="{{ url_for('kelas_detail', kelas_id=schedule._id) }}" 
+               class="flex-1 bg-white border-2 border-blue-700 text-blue-700 text-center py-2 rounded-lg hover:bg-blue-50 transition font-medium">
+              Detail
+            </a>
+          </div>
         </div>
-        <h3 class="text-xl font-bold text-blue-500 mb-2">{{ schedule.level }}</h3>
-        <p class="text-gray-600 text-sm mb-4">{{ schedule.description }}</p>
-        <ul class="text-sm text-gray-500 mb-4 space-y-1">
-          <li>Mulai: {{ schedule.start_date }}</li>
-          <li>Jadwal: {{ schedule.schedule }}</li>
-          <li>Harga: Rp {{ "{:,.0f}".format(schedule.price) }}</li>
-          <li>Spot Tersisa: {{ schedule.spots_available }}/10</li>
-        </ul>
-        <div class="flex space-x-2">
-          <a href="/daftar?level={{ schedule.level }}" 
-             class="flex-1 bg-blue-700 text-white py-2 rounded-lg text-center hover:bg-blue-900 transition">Daftar</a>
-          <a href="#jadwal-detail" 
-             class="px-4 py-2 bg-white border-2 border-blue-700 text-blue-700 rounded-lg hover:bg-blue-100 transition">Detail</a>
-        </div>
+      </div>
+      {% else %}
+      <div class="col-span-full text-center py-12">
+        <p class="text-gray-500 text-lg">Belum ada kelas terjadwal. Cek lagi nanti atau <a href="/kontak" class="text-blue-600 underline">hubungi kami</a>!</p>
       </div>
       {% endfor %}
     </div>
-    
-    {% if not schedules %}
-    <p class="text-center text-gray-500">Belum ada kelas terjadwal. Cek lagi nanti atau hubungi kami!</p>
-    {% endif %}
+  </div>
+</section>
+
+<!-- CTA Daftar -->
+<section id="daftar" class="py-16 bg-blue-700 text-white">
+  <div class="max-w-4xl mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold mb-4">Siap Belajar Bahasa Jepang?</h2>
+    <p class="mb-8">Pilih kelas sesuai levelmu. Siswa lama? Gunakan <a href="/placement-test" class="underline font-bold">Placement Test</a> untuk lanjut tanpa mulai dari awal!</p>
+    <a href="/placement-test" class="bg-white text-blue-700 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition">
+      Ambil Placement Test Gratis
+    </a>
   </div>
 </section>
 {% endblock %}
 
-<!-- JavaScript untuk Filter -->
+<!-- JavaScript Filter -->
 <script>
-  function filterSchedules(status) {
-    const cards = document.querySelectorAll('#schedules-grid > div');
+  function filterKelas(status) {
+    const cards = document.querySelectorAll('.kelas-card');
+    const buttons = document.querySelectorAll('.filter-btn');
+
+    // Update active button
+    buttons.forEach(btn => {
+      btn.classList.remove('active');
+      if (btn.textContent.trim() === (status === 'all' ? 'Semua' : status === 'ongoing' ? 'Berlangsung' : 'Segera Dibuka')) {
+        btn.classList.add('active');
+      }
+    });
+
+    // Filter cards
     cards.forEach(card => {
-      const statusText = card.querySelector('span').textContent.toLowerCase().trim();
-      if (status === 'all' || statusText.includes(status)) {
+      const cardStatus = card.dataset.status;
+      if (status === 'all' || cardStatus === status) {
         card.style.display = 'block';
       } else {
         card.style.display = 'none';
       }
     });
   }
+
+  // Set active button style
+  document.addEventListener('DOMContentLoaded', () => {
+    const style = document.createElement('style');
+    style.textContent = `
+      .filter-btn { background: #e5e7eb; color: #374151; }
+      .filter-btn.active { background: #1d4ed8; color: white; }
+    `;
+    document.head.appendChild(style);
+  });
 </script>
+
+<style>
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

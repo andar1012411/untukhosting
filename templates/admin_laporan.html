@@ -1,0 +1,72 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}Genkan Institute - Admin Laporan{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-8">
+  <h2 class="text-4xl font-bold mb-6 text-blue-700 animate-fade-in">Laporan Pendaftaran per Batch</h2>
+
+  <!-- Tombol Export -->
+  <a href="{{ url_for('admin_export_laporan') }}" class="mb-6 inline-block bg-blue-700 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">
+    Export ke CSV (Spreadsheet)
+  </a>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="mb-6 p-4 rounded-xl flex items-center {% if category == 'success' %}bg-green-50 text-green-800 border border-green-200{% else %}bg-red-50 text-red-800 border border-red-200{% endif %} animate-fade-in">
+          <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            {% if category == 'success' %}
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            {% else %}
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+            {% endif %}
+          </svg>
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  {% if laporan %}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      {% for item in laporan %}
+        <div class="bg-white rounded-2xl p-6 shadow-xl card border border-blue-100 animate-fade-in">
+            <h3 class="text-xl font-bold mb-4 text-blue-700">Batch: {{ item._id or 'Tidak diketahui' }}</h3>
+            {% if item.kelas_info %}
+              <p class="text-gray-600 mb-2 text-sm"><strong>Level Kelas:</strong> {{ item.kelas_info.level }}</p>
+              <p class="text-gray-600 mb-2 text-sm"><strong>Tanggal Mulai:</strong> {{ item.kelas_info.start_date }}</p>
+              <p class="text-gray-600 mb-4 text-sm"><strong>Spot Terisi / Total:</strong> {{ item.kelas_info.spots_terisi }} / {{ item.kelas_info.spots_total }}</p>
+            {% endif %}
+            <div class="mb-4 text-sm">
+              <p><strong>Total Pendaftar:</strong> {{ item.total_pendaftar }}</p>
+              <p><strong>Pending:</strong> {{ item.pending }}</p>
+              <p><strong>Completed:</strong> {{ item.completed }}</p>
+            </div>
+            <h4 class="text-lg font-semibold mb-2 text-blue-700">Daftar Siswa:</h4>
+            <ul class="space-y-3 text-sm">
+              {% for siswa in item.siswa_list %}
+              <li class="border-b border-blue-100 pb-2">
+                <p><strong>Nama:</strong> {{ siswa.nama }}</p>
+                <p><strong>Email:</strong> {{ siswa.email }}</p>
+                <p><strong>WhatsApp:</strong> {{ siswa.whatsapp or 'Tidak diisi' }}</p> <!-- Tambahkan ini -->
+                <p><strong>Level:</strong> {{ siswa.level }}</p>
+                <p><strong>Status:</strong> <span class="{% if siswa.status == 'completed' %}text-green-600{% else %}text-yellow-600{% endif %}">{{ siswa.status | title }}</span></p>
+                <p><strong>Tanggal Daftar:</strong> {{ siswa.tanggal.strftime('%Y-%m-%d') }}</p>
+              </li>
+              {% endfor %}
+            </ul>
+            <form method="POST" action="/admin/update_status" class="mt-4">
+              <input type="hidden" name="batch_id" value="{{ item._id }}">
+              <button type="submit" name="action" value="complete_all" class="w-full btn-success py-2.5 rounded-xl shadow-md hover:shadow-lg transition animate-pulse-slow">Tandai Semua Completed</button>
+            </form>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="text-center py-16 bg-white rounded-2xl shadow-lg border border-blue-100 animate-fade-in">
+      <p class="text-xl text-blue-600 font-medium">Belum ada pendaftaran. Cek lagi nanti!</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

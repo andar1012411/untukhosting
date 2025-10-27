@@ -1,0 +1,43 @@
+{% extends 'header_footer.html' %}
+
+{% block title %}Daftar Kelas - Genkan Institute{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-blue-50">
+  <div class="max-w-md mx-auto px-6 bg-white rounded-2xl shadow-lg p-8">
+    <h2 class="text-3xl font-bold text-center text-blue-700 mb-6">Daftar Kelas</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="mb-4 p-4 rounded-lg {% if category == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <form method="POST" class="space-y-4">
+      <div>
+        <label class="block text-sm font-semibold text-blue-700 mb-1">Nama</label>
+        <input type="text" name="nama" required class="w-full px-4 py-3 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-400">
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-blue-700 mb-1">Email</label>
+        <input type="email" name="email" required class="w-full px-4 py-3 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-400">
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-blue-700 mb-1">Nomor WhatsApp</label>
+        <input type="tel" name="whatsapp" placeholder="Contoh: 081234567890" required class="w-full px-4 py-3 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-400">
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-blue-700 mb-1">Level Kelas</label>
+        <select name="level" required class="w-full px-4 py-3 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-400">
+          {% for kelas in available_levels %}
+            <option value="{{ kelas.level }}">{{ kelas.level }} - {{ kelas.title }} ({{ kelas.spots_available }} spot tersisa)</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="w-full bg-blue-700 text-white py-3 rounded-lg hover:bg-blue-800 transition">Daftar</button>
+    </form>
+  </div>
+</section>
+{% endblock %}
